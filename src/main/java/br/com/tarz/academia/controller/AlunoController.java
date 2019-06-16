@@ -1,7 +1,8 @@
 package br.com.tarz.academia.controller;
 
+import java.text.ParseException;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.bind.BindResult;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,12 +13,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.com.tarz.academia.model.Aluno;
 import br.com.tarz.academia.repository.AlunoRepository;
+import br.com.tarz.academia.resource.AlunoResource;
+import br.com.tarz.academia.service.AlunoService;
 
 @Controller
 public class AlunoController {
 
 	@Autowired
-	private AlunoRepository ar;
+	AlunoRepository ar;
+	@Autowired
+	AlunoService alunoService;
 
 	@RequestMapping(value = "/cadastrarAluno", method = RequestMethod.GET)
 	public String form() {
@@ -25,13 +30,18 @@ public class AlunoController {
 	}
 
 	@RequestMapping(value = "/cadastrarAluno", method = RequestMethod.POST)
-	public String salvar(Aluno aluno, BindingResult result, RedirectAttributes attributes) {
-		if(result.hasErrors()) {
+	public String salvar(AlunoResource aluno, BindingResult result, RedirectAttributes attributes) {
+		if (result.hasErrors()) {
 			attributes.addFlashAttribute("mensagem", "Campos vazio!");
-			return "redirect:/cadastrarAluno";	
+			return "redirect:/cadastrarAluno";
 		}
-		ar.save(aluno);
-		attributes.addFlashAttribute("mensagem", "Aluno salvo com sucesso!");
+		try {
+			alunoService.salvarAluno(aluno);
+			attributes.addFlashAttribute("mensagem", "Aluno salvo com sucesso!");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
 		return "redirect:/cadastrarAluno";
 	}
 
@@ -42,13 +52,13 @@ public class AlunoController {
 		mv.addObject("alunos", alunos);
 		return mv;
 	}
-	
+
 	@RequestMapping("/deletar")
 	public String deletarAluno(long id) {
 		Aluno aluno = ar.findById(id);
 		ar.delete(aluno);
 		return "redirect:/alunos";
-		
+
 	}
 
 	@RequestMapping("/{id}")
@@ -57,7 +67,6 @@ public class AlunoController {
 		Aluno aluno = ar.findById(id);
 		mv.addObject("aluno", aluno);
 		return mv;
-
 	}
 
 }
