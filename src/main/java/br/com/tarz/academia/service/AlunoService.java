@@ -1,29 +1,29 @@
 package br.com.tarz.academia.service;
 
-import java.text.ParseException;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-import br.com.tarz.academia.model.Aluno;
+import br.com.tarz.academia.converter.AlunoConverter;
+import br.com.tarz.academia.entity.Aluno;
 import br.com.tarz.academia.repository.AlunoRepository;
 import br.com.tarz.academia.resource.AlunoResource;
 
-@Service
+@Component
 public class AlunoService {
 
 	@Autowired
 	AlunoRepository ar;
 
-	@SuppressWarnings("deprecation")
-	public void salvarAluno(AlunoResource alunoResource) throws ParseException {
+	public AlunoResource salvarAluno(AlunoResource alunoResource)   {
 		Date dataFim = new Date();
 		dataFim.setMonth(1);
 		alunoResource.getMatricula().setDataInicio(new Date());
 		alunoResource.getMatricula().setDataFim(dataFim);
-		Aluno a = new Aluno(alunoResource);
-		ar.save(a);
+		Aluno aluno = ar.save(AlunoConverter.toEntity(alunoResource));
+		alunoResource.setId(aluno.getId());
+		return alunoResource;
 	}
 
 }

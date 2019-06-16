@@ -1,12 +1,28 @@
 package br.com.tarz.academia.resource;
 
-import br.com.tarz.academia.model.Matricula;
+import java.io.Serializable;
+import java.sql.Date;
 
-public class AlunoResource {
+import br.com.tarz.academia.entity.Matricula;
 
+public class AlunoResource implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8565695382723300284L;
+	private Long id;
 	private String nome;
-	private String data;
+	private Date data;
 	private Matricula matricula;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public String getNome() {
 		return nome;
@@ -16,11 +32,11 @@ public class AlunoResource {
 		this.nome = nome;
 	}
 
-	public String getData() {
+	public Date getData() {
 		return data;
 	}
 
-	public void setData(String data) {
+	public void setData(Date data) {
 		this.data = data;
 	}
 

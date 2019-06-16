@@ -1,9 +1,7 @@
-package br.com.tarz.academia.model;
+package br.com.tarz.academia.entity;
 
 import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.sql.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -11,8 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotEmpty;
-
-import br.com.tarz.academia.resource.AlunoResource;
 
 @Entity
 public class Aluno implements Serializable {
@@ -34,13 +30,6 @@ public class Aluno implements Serializable {
 
 	public Aluno() {
 		super();
-	}
-
-	public Aluno(AlunoResource aluno) throws ParseException {
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		this.nome = aluno.getNome();
-		this.data = format.parse(aluno.getData());
-		this.matricula = aluno.getMatricula();
 	}
 
 	public Aluno(long id, @NotEmpty String nome, int status, Date data, Matricula matricula) {

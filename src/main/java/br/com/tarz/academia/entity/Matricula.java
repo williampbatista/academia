@@ -1,4 +1,4 @@
-package br.com.tarz.academia.model;
+package br.com.tarz.academia.entity;
 
 import java.io.Serializable;
 import java.util.Date;
